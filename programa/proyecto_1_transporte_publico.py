@@ -1,5 +1,64 @@
 #PROYECTO 1 - TALLER DE PROGRAMACIÓN
 
+#LEER ARCHIVO DE USUARIOS Y CONTRASEÑAS
+#E: Recibe el nombre del archivo con todas las claves y usuarios
+#S: Retorna una lista ya preparada con los usuarios y claves separados en texto
+#R: El usuario no puede controlar esta función, se ejecuta por medio de login
+
+def usuarios(archivo):
+    if isinstance(archivo, str):
+        usuarios= []
+        contraseñas= []
+        with open(archivo, "r") as archivo:
+            linea= archivo.readline()
+            while linea != "":
+                separa= False
+                i= 0
+                user= ""
+                passw= ""
+                caracter= ""
+                while i < len(linea):
+                    caracter= linea[i]
+                    if separa != True:
+                        if caracter == ";":
+                            separa= True
+                        else:
+                            user= user + caracter
+                    else:
+                        if caracter != "\n":
+                            passw= passw + caracter
+                    i= i+1
+                usuarios= usuarios + [user]
+                contraseñas= contraseñas + [passw]
+                linea= archivo.readline()
+        return [usuarios, contraseñas]
+
+
+#INICIO DE SESIÓN
+#E: Se llama al querer entrar a el menú de admins
+#S: Si la contraseña y el usuario esta bien, permite la entrada, si no, la niega
+#R: Solo acepta aquellos usuario y contraseñas que esten el archivo de texto leido por la función usuarios
+
+def login():
+    datos= usuarios("login.txt")
+    usuario= datos[0]
+    contraseña= datos[1]
+    print("\nMenú de administradores, porfavor ingrese sus credenciales")
+    user= input("Usuario: ")
+    password= input("Contraseña: ")
+    i= 0
+    acceso= False
+    while i < len(usuario):
+        if user == usuario[i] and password == contraseña[i]:
+            acceso= True
+        i= i+1
+    if acceso == True:
+        print("\n¡Bienvenido!")
+        menu_admin()
+    else:
+        print("\nUsuario o contraseña incorrectos, vuelva a intentarlo")
+
+
 #MENÚ USUARIOS
 #E: Cuando se ingresa 2 en el menú principal
 #S: Muestra todas las opciones del menu para usuarios
@@ -64,7 +123,7 @@ def menu_principal():
         if opcion == "1":
             menu_admin()
         elif opcion == "2":
-            menu_user()
+            login()
         elif opcion == "3":
             print("¡Gracias por preferirnos!")
             print("Saliendo...")
@@ -74,17 +133,3 @@ def menu_principal():
 #Inicializar menú
 menu_principal()
 
-
-
-
-
-
-
-
-#Creación de un sistema de contraseñas para acceso
-
-#IDEA PRINCIPAL: Que cuando el usuario quiera acceder, tenga que ingresar una contraseña
-#Se va a componer de Usuario;Contrseña, ambos guardados en un archivo de texto
-
-#Desde el archivo Python recibe un solo string: "Kris;1234"
-#Hay que buscar la manera de que reconozca a ; como separador
