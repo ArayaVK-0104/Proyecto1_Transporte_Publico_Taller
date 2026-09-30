@@ -1,5 +1,50 @@
 #PROYECTO 1 - TALLER DE PROGRAMACIÓN
 
+
+#FUNCIÓN AUXILIAR - Detectar repetidos
+#E: Abre el archivo según el caso de gestión
+#S: repetido nos dira si lo que ingreso el usuario ya existe o no
+#R: El usuario no puede tener control directo sobre la función, solo su input
+
+def detecta_repetidos(archivo, dato_user):
+    with open(archivo, "r") as archivo: 
+        linea= archivo.readline()
+        repetido= False
+        while linea != "" and repetido == False:
+            i= 0
+            descripcion= ""
+            FIN_descripcion= False
+            while i < len(linea):
+                if linea[i] != ";" and FIN_descripcion == False:
+                    descripcion= descripcion + linea[i]
+                else:
+                    FIN_descripcion= True
+                i= i +1
+            if dato_user == descripcion:
+                repetido= True
+            else:
+                linea= archivo.readline()
+        return repetido
+
+
+#AGREGAR MODELOS
+#E: Recibe el archivo a analizar y los inputs que el usuario desea agregar
+#S: Si el proceso se realiza de manera satisfactoria, sus datos se agregaran
+#R: No pueden existir 2 modelos iguales 
+
+def incluir_modelos(archivo):
+    print("\nPorfavor ingrese los datos del modelo de autobús que desea agregar")
+    modelo= input("Descripción del modelo: ")
+    repetido= detecta_repetidos(archivo, modelo)
+    while repetido == True:
+        print("\nEste modelo que usted ingreso ya existe, porfavor eliga otro")
+        modelo= input("Descripción del modelo: ")
+        repetido= detecta_repetidos(archivo, modelo)
+    marca= input("Marca del autobús: ")
+    cant_asientos= input("Cantidad de asientos: ")
+    cant_de_pie= input("Cantidad de espacios a pie: ")
+
+
 #LEER ARCHIVO DE USUARIOS Y CONTRASEÑAS
 #E: Recibe el nombre del archivo con todas las claves y usuarios
 #S: Retorna una lista ya preparada con los usuarios y claves separados en texto
@@ -95,10 +140,26 @@ def menu_admin():
         print("(16) Programación de salidas")
         print("(17) Consultar historial de abordajes")
         print("(18) Regresar al menú principal")
+
         opcion= input("Elija una opción: ")
-        
         if opcion == "11":
-            print("PLACEHOLDER")
+            print("\nGestión de modelos de autobús")
+            print("(1)Incluir modelo")
+            print("(2) Eliminar modelo")
+            print("(3) Modificar modelo")
+            print("(4) Mostrar modelos")
+            print("(5) Volver")
+
+            opcion_gm= input("Elija una opción: ")
+            if opcion_gm == "1":
+                archivo= "modelos.txt"
+                incluir_modelos(archivo)
+            
+            if opcion_gm == "5":
+                menu_admin()
+            else:
+                print("Esto no es una opción,porfavor escoja un número valido")
+            
         elif opcion == "18":
             print("Volviendo al menú principal")
             menu_principal()
@@ -121,9 +182,9 @@ def menu_principal():
 
         opcion= input("Elija una opcion: ")
         if opcion == "1":
-            menu_admin()
-        elif opcion == "2":
             login()
+        elif opcion == "2":
+            menu_user()
         elif opcion == "3":
             print("¡Gracias por preferirnos!")
             print("Saliendo...")

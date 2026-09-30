@@ -1,0 +1,3 @@
+9700;Volvo;45;12
+Torino;Mercedes Benz;38;15
+Citaro;Mercedes Benz;30;25
