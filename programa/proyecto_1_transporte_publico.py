@@ -33,7 +33,51 @@ def detecta_repetidos(archivo, dato_user):
                 linea= archivo.readline()
         return repetido
 
+#AGREGAR UNIDADES
+#E:
+#S:
+#R:
 
+def incluir_unidades(archivo):
+    archivo_origen= archivo
+    print("\nPorfavor ingrese los datos de la unidad de autobús que desea agregar")
+    placa= input("Placa de la unidad: ")
+
+    repetido= detecta_repetidos(archivo, placa)
+    while repetido == True:
+        print("\nEsta placa ya existe, porfavor ingrese otra")
+        placa= input("Placa de la unidad: ")
+        repetido= detecta_repetidos(archivo, placa)
+
+    save_modelos= []
+    with open("modelos.txt", "r") as archivo:
+        linea= archivo.readline()
+        num= 1
+        while linea != "":
+            i= 0
+            descripcion= ""
+            FIN_descripcion= False
+            while i < len(linea):
+                if linea[i] != ";" and FIN_descripcion == False:
+                    descripcion= descripcion + linea[i]
+                else:
+                    FIN_descripcion= True
+                i= i + 1
+            print(num,"-", descripcion)
+            save_modelos= save_modelos + [descripcion]
+            num= num + 1
+            linea= archivo.readline()
+
+    modelo= input("Seleccione el modelo: ")
+    modelo= int(modelo)
+    modelo_selecto= save_modelos[modelo - 1]
+    año= input("Año de la unidad: ")
+    empresa= input("Empresa Operadora: ")
+    incluir= placa + ";" + modelo_selecto + ";" + año + ";" + empresa
+    with open(archivo_origen, "a") as archivo:
+        archivo.write(incluir + "\n" )
+    
+    
 #MOSTRAR MODELOS
 #E: Recibe el archivo de modelos.txt
 #S: Muestra todos los modelos actualmente registrados al usuario 
@@ -109,9 +153,8 @@ def modificar_modelos(archivo):
                 linea= archivo.readline()
         with open(archivo_origen, "w") as archivo:
             archivo.write(guardar)
-            
-    
 
+            
 #ELIMINAR MODELOS
 #E: Recibe el archivo a analizar y el input de modelo que queremos eliminar 
 #S: Se elimina el modelo especificado y queda todo lo demás
@@ -143,8 +186,8 @@ def eliminar_modelo(archivo):
                 linea= archivo.readline()
         with open(archivo_origen, "w") as archivo:
             archivo.write(guardar)
-        
 
+        
 #AGREGAR MODELOS
 #E: Recibe el archivo a analizar y los inputs que el usuario desea agregar
 #S: Si el proceso se realiza de manera satisfactoria, sus datos se agregaran
@@ -320,13 +363,34 @@ def menu_admin():
                 
         if opcion == "12":
             print ("\nGestión de unidades")
-            print("(1)Incluir unidad")
+            print("(1) Incluir unidad")
             print("(2) Eliminar unidad")
             print("(3) Modificar unidad")
             print("(4) Mostrar unidades")
             print("(5) Volver")
 
             opcion_gu= input("Elija una opción: ")
+            if opcion_gu == "1":
+                archivo= "unidades.txt"
+                incluir_unidades(archivo)
+                print("Se incluyo la unidad de forma exitosa!")
+                menu_admin()
+                
+            if opcion_gu == "2":
+                #ARCHIVO "unidades.txt"
+                #AQUI VA ELIMINAR UNIDAD
+                menu_admin()
+
+            if opcion_gu == "3":
+                #ARCHIVO "unidades.txt"
+                #AQUI VA MODIFICAR UNIDAD
+                menu_admin()
+
+            if opcion_gu == "4":
+                #ARCHIVO "unidades.txt"
+                #AQUI VA MOSTRAR UNIDADES
+                menu_admin()
+
             if opcion_gu == "5":
                 menu_admin()
             else:
@@ -341,6 +405,26 @@ def menu_admin():
             print("(5) Volver")
 
             opcion_gc= input("Elija una opción: ")
+            if opcion_gc == "1":
+                #ARCHIVO "conductores.txt"
+                #AQUI VA INCLUIR CONDUCTOR
+                menu_admin()
+                
+            if opcion_gc == "2":
+                #ARCHIVO ""conductores.txt"
+                #AQUI VA ELIMINAR CONDUCTOR
+                menu_admin()
+
+            if opcion_gc == "3":
+                #ARCHIVO "conductores.txt"
+                #AQUI VA MODIFICAR CONDUCTOR
+                menu_admin()
+
+            if opcion_gc == "4":
+                #ARCHIVO "conductores.txt"
+                #AQUI VA MOSTRAR CONDUCTORES
+                menu_admin()
+            
             if opcion_gc == "5":
                 menu_admin()
             else:
