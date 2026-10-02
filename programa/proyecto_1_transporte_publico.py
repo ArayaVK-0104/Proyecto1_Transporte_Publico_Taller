@@ -1,5 +1,12 @@
 #PROYECTO 1 - TALLER DE PROGRAMACIÓN
 
+"""
+                                                          ===  SECCIÓN DE LAS FUNCIONES OPERATIVAS ===
+                                                          
+                            Aqui es desde donde se trabaja roda la lógica detrás del programa: Validaciones, manejo de archivos y operaciones
+                                        en general. Todas estas funciones son llamadas desde el menú según lo requiera el usuario.
+"""
+
 
 #FUNCIÓN AUXILIAR - Detectar repetidos
 #E: Abre el archivo según el caso de gestión
@@ -27,6 +34,46 @@ def detecta_repetidos(archivo, dato_user):
         return repetido
 
 
+#MODIFICAR MODELOS
+#E: Toma el archivo de "modelos.txt"
+#S: Retorna el modelo deseado con las nuevas especificaciones
+#R: No se puede modificar el modelo (Osea, si es Torino, no puedes cambiar Torino, solo puedes cambiar la marca, los asientos y espacios de pie)
+    
+def modificar_modelos(archivo):
+    archivo_origen= archivo
+    print("\nIngrese el modelo que desea modificar")
+    modelo= input("Descripción del modelo: ")
+    if detecta_repetidos(archivo, modelo) == False:
+        print("ERROR: Este modelo no existe porfavor refierase a (4) Mostrar modelos, para ver la lista de modelos registrados")
+        menu_admin()
+    else:
+        new_marca= input("Marca nueva: ")
+        new_cant_asientos= input("La nueva cantidad de asientos: ")
+        new_cant_de_pie= input("La nueva cantidad de espacios a pie: ")
+        nuevos_datos= modelo + ";" + new_marca + ";" + new_cant_asientos + ";" + new_cant_de_pie + "\n"
+        with open(archivo, "r") as archivo:
+            linea= archivo.readline()
+            guardar= ""
+            while linea != "":
+                i= 0
+                descripcion= ""
+                FIN_descripcion= False
+                while i < len(linea):
+                    if linea[i] != ";" and FIN_descripcion == False:
+                        descripcion= descripcion + linea[i]
+                    else:
+                        FIN_descripcion= True
+                    i= i + 1
+                if descripcion != modelo:
+                    guardar= guardar + linea
+                else:
+                    guardar= guardar + nuevos_datos
+                linea= archivo.readline()
+        with open(archivo_origen, "w") as archivo:
+            archivo.write(guardar)
+            
+    
+
 #ELIMINAR MODELOS
 #E: Recibe el archivo a analizar y el input de modelo que queremos eliminar 
 #S: Se elimina el modelo especificado y queda todo lo demás
@@ -34,7 +81,7 @@ def detecta_repetidos(archivo, dato_user):
 
 def eliminar_modelo(archivo):
     archivo_origen= archivo
-    print("\nIngrese los datos del modelo que desea eliminar")
+    print("\nIngrese el modelo que desea eliminar")
     modelo= input("Descripción del modelo: ")
     if detecta_repetidos(archivo, modelo) == False:
         print("ERROR: Este modelo no existe porfavor refierase a (4) Mostrar modelos, para ver la lista de modelos registrados")
@@ -60,7 +107,6 @@ def eliminar_modelo(archivo):
             archivo.write(guardar)
         
 
-
 #AGREGAR MODELOS
 #E: Recibe el archivo a analizar y los inputs que el usuario desea agregar
 #S: Si el proceso se realiza de manera satisfactoria, sus datos se agregaran
@@ -83,11 +129,6 @@ def incluir_modelos(archivo):
     with open(archivo, "a") as archivo:
         archivo.write(incluir + "\n" )
         
-    
-        
-        
-        
-
 
 #LEER ARCHIVO DE USUARIOS Y CONTRASEÑAS
 #E: Recibe el nombre del archivo con todas las claves y usuarios
@@ -148,6 +189,22 @@ def login():
         print("\nUsuario o contraseña incorrectos, vuelva a intentarlo")
 
 
+
+
+
+
+
+
+"""
+                                                           ===  SECCIÓN DEL MENU  ===
+                                                               
+                        Aqui es de donde se trabajan las llamadas de las funciones que trabajan en archviso .txt, asi como
+                                controlar y asegurarse de que todos los menús se desplieguen cuando se requieran. 
+
+"""
+
+
+
 #MENÚ USUARIOS
 #E: Cuando se ingresa 2 en el menú principal
 #S: Muestra todas las opciones del menu para usuarios
@@ -201,11 +258,16 @@ def menu_admin():
                 print("Se incluyo el modelo de forma exitosa!")
                 menu_admin()
                 
-                
             if opcion_gm == "2":
                 archivo= "modelos.txt"
                 eliminar_modelo(archivo)
                 print ("Se elimino el modelo de forma exitosa!")
+                menu_admin()
+
+            if opcion_gm == "3":
+                archivo= "modelos.txt"
+                modificar_modelos(archivo)
+                print("Se modifico el modelo de forma exitosa!")
                 menu_admin()
 
             if opcion_gm == "5":

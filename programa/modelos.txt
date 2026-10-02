@@ -1,2 +1,2 @@
 9700;Volvo;45;12
-Torino;Mercedes Benz;38;15
+Torino;Mercedes Benz;40;20
