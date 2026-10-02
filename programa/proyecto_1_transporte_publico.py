@@ -34,6 +34,44 @@ def detecta_repetidos(archivo, dato_user):
         return repetido
 
 
+#MOSTRAR MODELOS
+#E: Recibe el archivo de modelos.txt
+#S: Muestra todos los modelos actualmente registrados al usuario 
+#R: Solo mostrara los modelos que existen
+
+def mostrar_modelos(archivo):
+    with open(archivo, "r") as archivo:
+        linea= archivo.readline()
+        while linea != "":
+            i= 0
+            campo= 1 #Variable para decicidir en que campo ira el dato mostrado
+            descripcion= ""
+            marca= ""
+            cant_asientos= ""
+            cant_de_pie= ""
+            while i < len(linea):
+                if linea[i] != ";":
+                    if campo == 1:
+                        descripcion= descripcion + linea[i]
+                    if campo == 2:
+                        marca= marca + linea[i]
+                    if campo == 3:
+                        cant_asientos= cant_asientos + linea[i]
+                    if campo == 4:
+                        cant_de_pie= cant_de_pie + linea[i]
+                else:
+                    campo= campo + 1
+                i= i+1
+            cant_total= int(cant_asientos) + int(cant_de_pie)
+            print("\n=== DATOS DEL MODELO ===")
+            print("Descripción del modelo:", descripcion)
+            print("Marca del modelo:", marca)
+            print("Cantidad de asientos:", cant_asientos)
+            print("Cantidad de espacios a pie:", cant_de_pie.strip())
+            print("Capacidad total:", cant_total)
+            linea= archivo.readline()
+
+
 #MODIFICAR MODELOS
 #E: Toma el archivo de "modelos.txt"
 #S: Retorna el modelo deseado con las nuevas especificaciones
@@ -268,6 +306,11 @@ def menu_admin():
                 archivo= "modelos.txt"
                 modificar_modelos(archivo)
                 print("Se modifico el modelo de forma exitosa!")
+                menu_admin()
+
+            if opcion_gm == "4":
+                archivo= "modelos.txt"
+                mostrar_modelos(archivo)
                 menu_admin()
 
             if opcion_gm == "5":
