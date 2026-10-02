@@ -27,6 +27,40 @@ def detecta_repetidos(archivo, dato_user):
         return repetido
 
 
+#ELIMINAR MODELOS
+#E: Recibe el archivo a analizar y el input de modelo que queremos eliminar 
+#S: Se elimina el modelo especificado y queda todo lo demás
+#R: Solo puede borrar una opción a la vez
+
+def eliminar_modelo(archivo):
+    archivo_origen= archivo
+    print("\nIngrese los datos del modelo que desea eliminar")
+    modelo= input("Descripción del modelo: ")
+    if detecta_repetidos(archivo, modelo) == False:
+        print("ERROR: Este modelo no existe porfavor refierase a (4) Mostrar modelos, para ver la lista de modelos registrados")
+        menu_admin()
+    else:
+        with open(archivo, "r") as archivo:
+            linea= archivo.readline()
+            guardar= ""
+            while linea != "":
+                i= 0
+                descripcion= ""
+                FIN_descripcion= False
+                while i < len(linea):
+                    if linea[i] != ";" and FIN_descripcion == False:
+                        descripcion= descripcion + linea[i]
+                    else:
+                        FIN_descripcion= True
+                    i= i + 1
+                if descripcion != modelo:
+                    guardar= guardar + linea
+                linea= archivo.readline()
+        with open(archivo_origen, "w") as archivo:
+            archivo.write(guardar)
+        
+
+
 #AGREGAR MODELOS
 #E: Recibe el archivo a analizar y los inputs que el usuario desea agregar
 #S: Si el proceso se realiza de manera satisfactoria, sus datos se agregaran
@@ -35,14 +69,24 @@ def detecta_repetidos(archivo, dato_user):
 def incluir_modelos(archivo):
     print("\nPorfavor ingrese los datos del modelo de autobús que desea agregar")
     modelo= input("Descripción del modelo: ")
+    
     repetido= detecta_repetidos(archivo, modelo)
     while repetido == True:
         print("\nEste modelo que usted ingreso ya existe, porfavor eliga otro")
         modelo= input("Descripción del modelo: ")
         repetido= detecta_repetidos(archivo, modelo)
+        
     marca= input("Marca del autobús: ")
     cant_asientos= input("Cantidad de asientos: ")
     cant_de_pie= input("Cantidad de espacios a pie: ")
+    incluir=  modelo + ";" + marca + ";" + cant_asientos + ";" + cant_de_pie
+    with open(archivo, "a") as archivo:
+        archivo.write(incluir + "\n" )
+        
+    
+        
+        
+        
 
 
 #LEER ARCHIVO DE USUARIOS Y CONTRASEÑAS
@@ -111,7 +155,7 @@ def login():
 
 def menu_user():
     while True:
-        print("\n== MENÚ DE USUARIO ==")
+        print("\n=== MENÚ DE USUARIO ===")
         print("(21) Consulta de salidas")
         print("(22) Registro de abordaje")
         print("(23) Anulación de abordaje")
@@ -131,7 +175,7 @@ def menu_user():
 
 def menu_admin():
     while True:
-        print("\n== MENÚ ADMINISTRATIVO ==")
+        print("\n=== MENÚ ADMINISTRATIVO ===")
         print("(11) Gestión de modelos de autobús")
         print("(12) Gestión de unidades")
         print("(13) Gestión de conductores")
@@ -143,8 +187,8 @@ def menu_admin():
 
         opcion= input("Elija una opción: ")
         if opcion == "11":
-            print("\nGestión de modelos de autobús")
-            print("(1)Incluir modelo")
+            print("\n=== GESTIÓN DE MODELOS DE AUTOBÚS ===")
+            print("(1) Incluir modelo")
             print("(2) Eliminar modelo")
             print("(3) Modificar modelo")
             print("(4) Mostrar modelos")
@@ -154,11 +198,49 @@ def menu_admin():
             if opcion_gm == "1":
                 archivo= "modelos.txt"
                 incluir_modelos(archivo)
-            
+                print("Se incluyo el modelo de forma exitosa!")
+                menu_admin()
+                
+                
+            if opcion_gm == "2":
+                archivo= "modelos.txt"
+                eliminar_modelo(archivo)
+                print ("Se elimino el modelo de forma exitosa!")
+                menu_admin()
+
             if opcion_gm == "5":
                 menu_admin()
             else:
                 print("Esto no es una opción,porfavor escoja un número valido")
+                
+        if opcion == "12":
+            print ("\nGestión de unidades")
+            print("(1)Incluir unidad")
+            print("(2) Eliminar unidad")
+            print("(3) Modificar unidad")
+            print("(4) Mostrar unidades")
+            print("(5) Volver")
+
+            opcion_gu= input("Elija una opción: ")
+            if opcion_gu == "5":
+                menu_admin()
+            else:
+                print("Esto no es una opción,porfavor escoja un número valido")
+
+        if opcion == "13":
+            print("\nGestión de conductores")
+            print("(1)Incluir un conductor")
+            print("(2) Eliminar un conductor")
+            print("(3) Modificar información de un conductor")
+            print("(4) Mostrar a los conductores")
+            print("(5) Volver")
+
+            opcion_gc= input("Elija una opción: ")
+            if opcion_gc == "5":
+                menu_admin()
+            else:
+                print("Esto no es una opción,porfavor escoja un número valido")
+            
             
         elif opcion == "18":
             print("Volviendo al menú principal")
@@ -175,7 +257,7 @@ def menu_admin():
 def menu_principal():
     while True:
         print("\nBienvenidos al Sistema TP")
-        print("\n== MENÚ PRINCIPAL ==")
+        print("\n=== MENÚ PRINCIPAL ===")
         print("(1) Opciones Administrativas")
         print("(2) Opciones de Usuario")
         print("(3) Salir")
