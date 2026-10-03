@@ -33,10 +33,148 @@ def detecta_repetidos(archivo, dato_user):
                 linea= archivo.readline()
         return repetido
 
+#MOSTRAR UNIDADES
+#E: Recibe el archivo unidades.txt 
+#S: Muestra los contenidos a detalle de este archivo
+#R: Solo muestra, no causa ningun tipo de edición al archivo 
+
+def mostrar_unidades(archivo):
+    with open(archivo, "r") as archivo:
+        linea= archivo.readline()
+        while linea != "":
+            i= 0
+            campo= 1
+            placa= ""
+            modelo= ""
+            año= ""
+            empresa= ""
+            while i < len(linea):
+                if linea[i] != ";":
+                    if campo == 1:
+                        placa= placa + linea[i]
+                    if campo == 2:
+                        modelo= modelo + linea[i]
+                    if campo == 3:
+                        año= año + linea[i]
+                    if campo == 4:
+                        empresa= empresa + linea[i]
+                else:
+                    campo= campo + 1
+                i= i+1
+            print("\n=== DATOS DE LA UNIDAD ===")
+            print("Placa de la unidad:", placa)
+            print("Descripción del modelo:", modelo)
+            print("Año de la unidad:", año)
+            print("Empresa operadora:", empresa.strip())
+            linea= archivo.readline()
+    
+
+#MODIFICAR UNIDADES
+#E: Recibe el archivo unidades.txt y el input de la placa a cambiar
+#S: Modifica la unidad de la que hayamos ingresado la placa
+#R: Solo se puede modificar una placa a la vez y solo aquellas que existan
+
+def modificar_unidades(archivo):
+    archivo_origen= archivo
+    print("\nIngrese la placa de la unidad que desea modificar: ")
+    placa= input("Placa de la unidad: ")
+    if detecta_repetidos(archivo, placa) == False:
+        print("ERROR: Esta placa no existe porfavor refierase a (4) Mostrar unidades, para ver la lista de unidades registradas y su placa")
+        menu_admin()
+    else:
+        #Bloque para obtener el modelo que deseamos
+        save_modelos= []
+        with open("modelos.txt", "r") as archivo:
+            linea= archivo.readline()
+            num= 1
+            while linea != "":
+                i= 0
+                descripcion= ""
+                FIN_descripcion= False
+                while i < len(linea):
+                    if linea[i] != ";" and FIN_descripcion == False:
+                        descripcion= descripcion + linea[i]
+                    else:
+                        FIN_descripcion= True
+                    i= i + 1
+                print(num,"-", descripcion)
+                save_modelos= save_modelos + [descripcion]
+                num= num + 1
+                linea= archivo.readline()
+
+        #Bloque constructor de nuevos datos
+        modelo= input("Seleccione el modelo: ")
+        modelo= int(modelo)
+        modelo_selecto= save_modelos[modelo - 1]
+        new_año= input("Año de la unidad: ")
+        new_empresa= input("Empresa Operadora: ")
+        nuevos_datos= placa + ";" + modelo_selecto + ";" + new_año + ";" + new_empresa + "\n"
+
+        #Bloque para guardar los nuevos datos
+        with open(archivo_origen, "r") as archivo:
+            linea= archivo.readline()
+            guardar= ""
+            while linea != "":
+                i= 0
+                nueva_unidad= ""
+                FIN_placa= False
+                while i < len(linea):
+                    if linea[i] != ";" and FIN_placa == False:
+                        nueva_unidad= nueva_unidad + linea[i]
+                    else:
+                        FIN_placa= True
+                    i= i + 1
+                if nueva_unidad != placa:
+                    guardar= guardar + linea
+                else:
+                    guardar= guardar + nuevos_datos
+                linea= archivo.readline()
+
+        #Guardamos 
+        with open(archivo_origen, "w") as archivo:
+            archivo.write(guardar)
+
+        
+        
+    
+    
+#ELIMINAR UNIDADES
+#E: Recibe el archivo unidades.txt,y el usuario pone en el input lo que quiere eliminar 
+#S: Se elimina la placa de la unidad elegida del archivo 
+#R: Se debe de eliminar una placa a la vez y solo las que existen se pueden eliminar 
+
+def eliminar_unidades(archivo):
+    archivo_origen= archivo
+    print("\nIngrese la placa de la unidad que desea eliminar: ")
+    placa= input("Placa de la unidad: ")
+    if detecta_repetidos(archivo, placa) == False:
+        print("ERROR: Esta placa no existe porfavor refierase a (4) Mostrar unidades, para ver la lista de unidades registradas y su placa")
+        menu_admin()
+    else:
+        with open(archivo, "r") as archivo:
+            linea= archivo.readline()
+            guardar= ""
+            while linea != "":
+                i= 0
+                placa_actual= ""
+                FIN_placa= False
+                while i < len(linea):
+                    if linea[i] != ";" and FIN_placa == False:
+                        placa_actual= placa_actual + linea[i]
+                    else:
+                        FIN_placa= True
+                    i= i + 1
+                if placa_actual != placa:
+                    guardar= guardar + linea
+                linea= archivo.readline()
+        with open(archivo_origen, "w") as archivo:
+            archivo.write(guardar)
+
+    
 #AGREGAR UNIDADES
-#E:
-#S:
-#R:
+#E: Recibe el archvio de unidades.txt, dentro de la función se llama a modelos.txt
+#S: Guarda los datos solicitados en unidades.txt
+#R: Solo se pueden elegir los modelos ya existentes
 
 def incluir_unidades(archivo):
     archivo_origen= archivo
@@ -377,18 +515,20 @@ def menu_admin():
                 menu_admin()
                 
             if opcion_gu == "2":
-                #ARCHIVO "unidades.txt"
-                #AQUI VA ELIMINAR UNIDAD
+                archivo= "unidades.txt"
+                eliminar_unidades(archivo)
+                print("Se elimino la unidad de forma exitosa!")
                 menu_admin()
 
             if opcion_gu == "3":
-                #ARCHIVO "unidades.txt"
-                #AQUI VA MODIFICAR UNIDAD
+                archivo= "unidades.txt"
+                modificar_unidades(archivo)
+                print("Se modifico la unidad de forma exitosa!")
                 menu_admin()
 
             if opcion_gu == "4":
-                #ARCHIVO "unidades.txt"
-                #AQUI VA MOSTRAR UNIDADES
+                archivo= "unidades.txt"
+                mostrar_unidades(archivo)
                 menu_admin()
 
             if opcion_gu == "5":
