@@ -33,6 +33,154 @@ def detecta_repetidos(archivo, dato_user):
                 linea= archivo.readline()
         return repetido
 
+"""
+
+SECCIÓN DE GESTIÓN DE UNIDADES
+
+"""
+
+#MOSTRAR CONDUCTORES
+#E: Recibe conductores.txt
+#S: Muestra todos los conductores registrados
+#R: Solo muestra los datos, no hace ninguna modificación sobre el archivo
+
+def mostrar_conductores(archivo):
+    with open(archivo, "r") as archivo:
+        linea= archivo.readline()
+        while linea != "":
+            i= 0
+            campo= 1 
+            cedula= ""
+            nombre= ""
+            tipo_licencia= ""
+            vence_licencia= ""
+            jornada_max= ""
+            while i < len(linea):
+                if linea[i] != ";":
+                    if campo == 1:
+                        cedula= cedula + linea[i]
+                    if campo == 2:
+                        nombre= nombre + linea[i]
+                    if campo == 3:
+                        tipo_licencia= tipo_licencia + linea[i]
+                    if campo == 4:
+                        vence_licencia= vence_licencia + linea[i]
+                    if campo == 5:
+                        jornada_max= jornada_max + linea[i]
+                else:
+                    campo= campo + 1
+                i= i+1
+            print("\n=== DATOS DEL CONDUCTOR ===")
+            print("Cédula del conductor:", cedula)
+            print("Nombre completo del conductor:", nombre )
+            print("Tipo de licencia:", tipo_licencia)
+            print("Vencimiento de la licencia:", vence_licencia)
+            print("Horas máximas de jornada diaria:", jornada_max.strip())
+            linea= archivo.readline()
+
+
+#MODIFICAR CONDUCTORES
+#E: Recibe el archvivo de conductores.txt
+#S: Modificara la información del conductor cuya cédula haya sido ingresada
+#R: La cédula debe de existir antes de modificarla 
+
+def modificar_conductores(archivo):
+    archivo_origen= archivo
+    print("\nIngrese la cédula del conductor al que le modificara sus datos")
+    cedula= input("Cédula del conductor: ")
+    if detecta_repetidos(archivo, cedula) == False:
+        print("ERROR: Esta cédula no existe porfavor refierase a (4) Mostrar conductores, para ver la lista de cédula y conductores válidos")
+        menu_admin()
+    else:
+        new_nombre= input("Nombre del conductor: ")
+        new_tipo_licencia= input("Tipo de licencia: ")
+        new_vence_licencia= input("Nueva fecha de vencimiento: ")
+        new_jornada_max= input("Actualización a las horas máx de jornada diaria: ")
+        nuevos_datos= cedula + ";" + new_nombre + ";" + new_tipo_licencia + ";" + new_vence_licencia + ";" + new_jornada_max + "\n"
+        with open(archivo, "r") as archivo:
+            linea= archivo.readline()
+            guardar= ""
+            while linea != "":
+                i= 0
+                new_cedula= ""
+                FIN_cedula= False
+                while i < len(linea):
+                    if linea[i] != ";" and FIN_cedula == False:
+                        new_cedula= new_cedula + linea[i]
+                    else:
+                        FIN_cedula= True
+                    i= i + 1
+                if new_cedula != cedula:
+                    guardar= guardar + linea
+                else:
+                    guardar= guardar + nuevos_datos
+                linea= archivo.readline()
+        with open(archivo_origen, "w") as archivo:
+            archivo.write(guardar)
+
+
+#ELIMINAR CONDUCTORES
+#E: Recibe el archivo de conductores.txt
+#S: La cédula que ingrese el usuario sera eliminada
+#R: La cédula debe de existir antes de ser eliminada 
+
+def eliminar_conductores(archivo):
+    archivo_origen= archivo
+    print("\nIngrese la cédula del conductor que desea eliminar")
+    cedula= input("Cédula del conductor: ")
+    if detecta_repetidos(archivo, cedula) == False:
+        print("ERROR: Esta cédula no existe porfavor refierase a (4) Mostrar conductores, para ver la lista de cédula y conductores válidos")
+        menu_admin()
+    else:
+        with open(archivo, "r") as archivo:
+            linea= archivo.readline()
+            guardar= ""
+            while linea != "":
+                i= 0
+                del_cedula= ""
+                FIN_cedula= False
+                while i < len(linea):
+                    if linea[i] != ";" and FIN_cedula == False:
+                        del_cedula= del_cedula + linea[i]
+                    else:
+                        FIN_cedula= True
+                    i= i + 1
+                if del_cedula != cedula:
+                    guardar= guardar + linea
+                linea= archivo.readline()
+        with open(archivo_origen, "w") as archivo:
+            archivo.write(guardar)
+
+
+#AGREGAR CONDUCTORES
+#E: Recibira el archivo de conductores.txt
+#S: Va a agregar nuevos conductores a la plantilla 
+#R: No pueden existir 2 conductores con la misma cédula 
+
+def agregar_conductores(archivo):
+    print("\nPorfavor ingrese los datos del conductor que desea agregar")
+    cedula= input("Cédula del conductor: ")
+    
+    repetido= detecta_repetidos(archivo, cedula)
+    while repetido == True:
+        print("\nEsta cédula ya esta registrada, porfavor ingrese otra")
+        cedula= input("Cédula del conductor: ")
+        repetido= detecta_repetidos(archivo, cedula)
+        
+    nombre= input("Nombre completo del conductor: ")
+    tipo_licencia= input("Tipo de licencia: ")
+    vence_licencia= input("Vencimiento de la licencia: ")
+    jornada_max= input("Horas máximas de jornada diaria: ")
+    incluir=  cedula + ";" + nombre + ";" + tipo_licencia + ";" + vence_licencia + ";" + jornada_max
+    with open(archivo, "a") as archivo:
+        archivo.write(incluir + "\n" )
+    
+"""
+
+SECCIÓN DE GESTIÓN DE UNIDADES
+
+"""
+
 #MOSTRAR UNIDADES
 #E: Recibe el archivo unidades.txt 
 #S: Muestra los contenidos a detalle de este archivo
@@ -135,9 +283,6 @@ def modificar_unidades(archivo):
             archivo.write(guardar)
 
         
-        
-    
-    
 #ELIMINAR UNIDADES
 #E: Recibe el archivo unidades.txt,y el usuario pone en el input lo que quiere eliminar 
 #S: Se elimina la placa de la unidad elegida del archivo 
@@ -215,7 +360,12 @@ def incluir_unidades(archivo):
     with open(archivo_origen, "a") as archivo:
         archivo.write(incluir + "\n" )
     
-    
+"""
+
+SECCIÓN DE GESTIÓN DE MODELOS
+
+"""
+
 #MOSTRAR MODELOS
 #E: Recibe el archivo de modelos.txt
 #S: Muestra todos los modelos actualmente registrados al usuario 
@@ -500,7 +650,7 @@ def menu_admin():
                 print("Esto no es una opción,porfavor escoja un número valido")
                 
         if opcion == "12":
-            print ("\nGestión de unidades")
+            print ("\n=== GESTIÓN DE UNIDADES ===")
             print("(1) Incluir unidad")
             print("(2) Eliminar unidad")
             print("(3) Modificar unidad")
@@ -537,8 +687,8 @@ def menu_admin():
                 print("Esto no es una opción,porfavor escoja un número valido")
 
         if opcion == "13":
-            print("\nGestión de conductores")
-            print("(1)Incluir un conductor")
+            print("\n=== GESTIÓN DE CONDUCTORES ===")
+            print("(1) Incluir un conductor")
             print("(2) Eliminar un conductor")
             print("(3) Modificar información de un conductor")
             print("(4) Mostrar a los conductores")
@@ -546,23 +696,26 @@ def menu_admin():
 
             opcion_gc= input("Elija una opción: ")
             if opcion_gc == "1":
-                #ARCHIVO "conductores.txt"
-                #AQUI VA INCLUIR CONDUCTOR
+                archivo= "conductores.txt"
+                agregar_conductores(archivo)
+                print("Se ha registrado al conductor correctamente!")
                 menu_admin()
                 
             if opcion_gc == "2":
-                #ARCHIVO ""conductores.txt"
-                #AQUI VA ELIMINAR CONDUCTOR
+                archivo= "conductores.txt"
+                eliminar_conductores(archivo)
+                print("Se ha eliminado al conductor correctamente!")
                 menu_admin()
 
             if opcion_gc == "3":
-                #ARCHIVO "conductores.txt"
-                #AQUI VA MODIFICAR CONDUCTOR
+                archivo= "conductores.txt"
+                modificar_conductores(archivo)
+                print("Se ha modificado al conductor correctamente")
                 menu_admin()
 
             if opcion_gc == "4":
-                #ARCHIVO "conductores.txt"
-                #AQUI VA MOSTRAR CONDUCTORES
+                archivo= "conductores.txt"
+                mostrar_conductores(archivo)
                 menu_admin()
             
             if opcion_gc == "5":
@@ -599,7 +752,7 @@ def menu_principal():
         elif opcion == "3":
             print("¡Gracias por preferirnos!")
             print("Saliendo...")
-            break #Por el momento, buscar una mejor manera luego
+            break#Por el momento, buscar una mejor manera luego
         else:
             print("Opción no valida, porfavor escoja uno de los números disponibles")
 #Inicializar menú
