@@ -90,7 +90,6 @@ def modificar_conductores(archivo):
     cedula= input("Cédula del conductor: ")
     if detecta_repetidos(archivo, cedula) == False:
         print("ERROR: Esta cédula no existe porfavor refierase a (4) Mostrar conductores, para ver la lista de cédula y conductores válidos")
-        menu_admin()
     else:
         new_nombre= input("Nombre del conductor: ")
         new_tipo_licencia= input("Tipo de licencia: ")
@@ -130,7 +129,6 @@ def eliminar_conductores(archivo):
     cedula= input("Cédula del conductor: ")
     if detecta_repetidos(archivo, cedula) == False:
         print("ERROR: Esta cédula no existe porfavor refierase a (4) Mostrar conductores, para ver la lista de cédula y conductores válidos")
-        menu_admin()
     else:
         with open(archivo, "r") as archivo:
             linea= archivo.readline()
@@ -228,7 +226,6 @@ def modificar_unidades(archivo):
     placa= input("Placa de la unidad: ")
     if detecta_repetidos(archivo, placa) == False:
         print("ERROR: Esta placa no existe porfavor refierase a (4) Mostrar unidades, para ver la lista de unidades registradas y su placa")
-        menu_admin()
     else:
         #Bloque para obtener el modelo que deseamos
         save_modelos= []
@@ -294,7 +291,6 @@ def eliminar_unidades(archivo):
     placa= input("Placa de la unidad: ")
     if detecta_repetidos(archivo, placa) == False:
         print("ERROR: Esta placa no existe porfavor refierase a (4) Mostrar unidades, para ver la lista de unidades registradas y su placa")
-        menu_admin()
     else:
         with open(archivo, "r") as archivo:
             linea= archivo.readline()
@@ -415,7 +411,6 @@ def modificar_modelos(archivo):
     modelo= input("Descripción del modelo: ")
     if detecta_repetidos(archivo, modelo) == False:
         print("ERROR: Este modelo no existe porfavor refierase a (4) Mostrar modelos, para ver la lista de modelos registrados")
-        menu_admin()
     else:
         new_marca= input("Marca nueva: ")
         new_cant_asientos= input("La nueva cantidad de asientos: ")
@@ -454,7 +449,6 @@ def eliminar_modelo(archivo):
     modelo= input("Descripción del modelo: ")
     if detecta_repetidos(archivo, modelo) == False:
         print("ERROR: Este modelo no existe porfavor refierase a (4) Mostrar modelos, para ver la lista de modelos registrados")
-        menu_admin()
     else:
         with open(archivo, "r") as archivo:
             linea= archivo.readline()
@@ -590,7 +584,7 @@ def menu_user():
 
         if opcion == "24":
             print("Volviendo al menú principal")
-            menu_principal()
+            return
         else:
             print("Esto no es una opción,porfavor escoja un número valido")
 
@@ -625,31 +619,28 @@ def menu_admin():
                 archivo= "modelos.txt"
                 incluir_modelos(archivo)
                 print("Se incluyo el modelo de forma exitosa!")
-                menu_admin()
                 
-            if opcion_gm == "2":
+            elif opcion_gm == "2":
                 archivo= "modelos.txt"
                 eliminar_modelo(archivo)
                 print ("Se elimino el modelo de forma exitosa!")
-                menu_admin()
 
-            if opcion_gm == "3":
+            elif opcion_gm == "3":
                 archivo= "modelos.txt"
                 modificar_modelos(archivo)
                 print("Se modifico el modelo de forma exitosa!")
-                menu_admin()
 
-            if opcion_gm == "4":
+            elif opcion_gm == "4":
                 archivo= "modelos.txt"
                 mostrar_modelos(archivo)
-                menu_admin()
 
-            if opcion_gm == "5":
-                menu_admin()
+            elif opcion_gm == "5":
+                print("Volviendo...")
+                
             else:
                 print("Esto no es una opción,porfavor escoja un número valido")
                 
-        if opcion == "12":
+        elif opcion == "12":
             print ("\n=== GESTIÓN DE UNIDADES ===")
             print("(1) Incluir unidad")
             print("(2) Eliminar unidad")
@@ -662,31 +653,28 @@ def menu_admin():
                 archivo= "unidades.txt"
                 incluir_unidades(archivo)
                 print("Se incluyo la unidad de forma exitosa!")
-                menu_admin()
                 
-            if opcion_gu == "2":
+            elif opcion_gu == "2":
                 archivo= "unidades.txt"
                 eliminar_unidades(archivo)
                 print("Se elimino la unidad de forma exitosa!")
-                menu_admin()
 
-            if opcion_gu == "3":
+            elif opcion_gu == "3":
                 archivo= "unidades.txt"
                 modificar_unidades(archivo)
                 print("Se modifico la unidad de forma exitosa!")
-                menu_admin()
 
-            if opcion_gu == "4":
+            elif opcion_gu == "4":
                 archivo= "unidades.txt"
                 mostrar_unidades(archivo)
-                menu_admin()
 
-            if opcion_gu == "5":
-                menu_admin()
+            elif opcion_gu == "5":
+                print("Volviendo...")
+                
             else:
                 print("Esto no es una opción,porfavor escoja un número valido")
 
-        if opcion == "13":
+        elif opcion == "13":
             print("\n=== GESTIÓN DE CONDUCTORES ===")
             print("(1) Incluir un conductor")
             print("(2) Eliminar un conductor")
@@ -699,34 +687,31 @@ def menu_admin():
                 archivo= "conductores.txt"
                 agregar_conductores(archivo)
                 print("Se ha registrado al conductor correctamente!")
-                menu_admin()
                 
-            if opcion_gc == "2":
+            elif opcion_gc == "2":
                 archivo= "conductores.txt"
                 eliminar_conductores(archivo)
                 print("Se ha eliminado al conductor correctamente!")
-                menu_admin()
 
-            if opcion_gc == "3":
+            elif opcion_gc == "3":
                 archivo= "conductores.txt"
                 modificar_conductores(archivo)
                 print("Se ha modificado al conductor correctamente")
-                menu_admin()
 
-            if opcion_gc == "4":
+            elif opcion_gc == "4":
                 archivo= "conductores.txt"
                 mostrar_conductores(archivo)
-                menu_admin()
             
-            if opcion_gc == "5":
-                menu_admin()
+            elif opcion_gc == "5":
+                print("Volviendo...")
+                
             else:
                 print("Esto no es una opción,porfavor escoja un número valido")
             
             
         elif opcion == "18":
             print("Volviendo al menú principal")
-            menu_principal()
+            return
         else:
             print("Esto no es una opción,porfavor escoja un número valido")
 
