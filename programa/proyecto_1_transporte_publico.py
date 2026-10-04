@@ -115,7 +115,7 @@ def modificar_conductores(archivo):
     print("\nIngrese la cédula del conductor al que le modificara sus datos")
     cedula= input("Cédula del conductor: ")
     if detecta_repetidos(archivo, cedula) == False:
-        print("ERROR: Esta cédula no existe porfavor refierase a (4) Mostrar conductores, para ver la lista de cédula y conductores válidos")
+        print("ERROR: Esta cédula no existe porfavor refierase a (4) Mostrar conductores,\npara ver la lista de cédula y conductores válidos")
     else:
         new_nombre= input("Nombre del conductor: ")
         new_tipo_licencia= input("Tipo de licencia: ")
@@ -142,6 +142,7 @@ def modificar_conductores(archivo):
                 linea= archivo.readline()
         with open(archivo_origen, "w") as archivo:
             archivo.write(guardar)
+            print("Se ha modificado al conductor correctamente")
 
 
 #ELIMINAR CONDUCTORES
@@ -154,7 +155,7 @@ def eliminar_conductores(archivo):
     print("\nIngrese la cédula del conductor que desea eliminar")
     cedula= input("Cédula del conductor: ")
     if detecta_repetidos(archivo, cedula) == False:
-        print("ERROR: Esta cédula no existe porfavor refierase a (4) Mostrar conductores, para ver la lista de cédula y conductores válidos")
+        print("ERROR: Esta cédula no existe porfavor refierase a (4) Mostrar conductores,\npara ver la lista de cédula y conductores válidos")
     else:
         with open(archivo, "r") as archivo:
             linea= archivo.readline()
@@ -174,6 +175,7 @@ def eliminar_conductores(archivo):
                 linea= archivo.readline()
         with open(archivo_origen, "w") as archivo:
             archivo.write(guardar)
+            print("Se ha eliminado al conductor correctamente!")
 
 
 #AGREGAR CONDUCTORES
@@ -246,12 +248,12 @@ def mostrar_unidades(archivo):
 #S: Modifica la unidad de la que hayamos ingresado la placa
 #R: Solo se puede modificar una placa a la vez y solo aquellas que existan
 
-def modificar_unidades(archivo):
+def modificar_unidades(archivo): #CONSTRUIDA CON APOYO DE LA IA
     archivo_origen= archivo
     print("\nIngrese la placa de la unidad que desea modificar: ")
     placa= input("Placa de la unidad: ")
     if detecta_repetidos(archivo, placa) == False:
-        print("ERROR: Esta placa no existe porfavor refierase a (4) Mostrar unidades, para ver la lista de unidades registradas y su placa")
+        print("ERROR: Esta placa no existe porfavor refierase a (4) Mostrar unidades,\npara ver la lista de unidades registradas y su placa")
     else:
         #Bloque para obtener el modelo que deseamos
         save_modelos= []
@@ -304,6 +306,7 @@ def modificar_unidades(archivo):
         #Guardamos 
         with open(archivo_origen, "w") as archivo:
             archivo.write(guardar)
+            print("Se modifico la unidad de forma exitosa!")
 
         
 #ELIMINAR UNIDADES
@@ -316,7 +319,7 @@ def eliminar_unidades(archivo):
     print("\nIngrese la placa de la unidad que desea eliminar: ")
     placa= input("Placa de la unidad: ")
     if detecta_repetidos(archivo, placa) == False:
-        print("ERROR: Esta placa no existe porfavor refierase a (4) Mostrar unidades, para ver la lista de unidades registradas y su placa")
+        print("ERROR: Esta placa no existe porfavor refierase a (4) Mostrar unidades,\npara ver la lista de unidades registradas y su placa")
     else:
         with open(archivo, "r") as archivo:
             linea= archivo.readline()
@@ -336,6 +339,7 @@ def eliminar_unidades(archivo):
                 linea= archivo.readline()
         with open(archivo_origen, "w") as archivo:
             archivo.write(guardar)
+            print("Se elimino la unidad de forma exitosa!")
 
     
 #AGREGAR UNIDADES
@@ -436,7 +440,7 @@ def modificar_modelos(archivo):
     print("\nIngrese el modelo que desea modificar")
     modelo= input("Descripción del modelo: ")
     if detecta_repetidos(archivo, modelo) == False:
-        print("ERROR: Este modelo no existe porfavor refierase a (4) Mostrar modelos, para ver la lista de modelos registrados")
+        print("ERROR: Este modelo no existe porfavor refierase a (4) Mostrar modelos,\npara ver la lista de modelos registrados")
     else:
         new_marca= input("Marca nueva: ")
         new_cant_asientos= input("La nueva cantidad de asientos: ")
@@ -462,6 +466,7 @@ def modificar_modelos(archivo):
                 linea= archivo.readline()
         with open(archivo_origen, "w") as archivo:
             archivo.write(guardar)
+            print("Se modifico el modelo de forma exitosa!")
 
             
 #ELIMINAR MODELOS
@@ -474,7 +479,7 @@ def eliminar_modelo(archivo):
     print("\nIngrese el modelo que desea eliminar")
     modelo= input("Descripción del modelo: ")
     if detecta_repetidos(archivo, modelo) == False:
-        print("ERROR: Este modelo no existe porfavor refierase a (4) Mostrar modelos, para ver la lista de modelos registrados")
+        print("ERROR: Este modelo no existe porfavor refierase a (4) Mostrar modelos,\npara ver la lista de modelos registrados")
     else:
         if comprobar_asociado("unidades.txt", modelo, 2) == True:
             print("ERROR: No se puede eliminar este modelo porque esta asociado a una unidad")
@@ -497,6 +502,7 @@ def eliminar_modelo(archivo):
                     linea= archivo.readline()
             with open(archivo_origen, "w") as archivo:
                 archivo.write(guardar)
+                print ("Se elimino el modelo de forma exitosa!")
 
         
 #AGREGAR MODELOS
@@ -581,12 +587,7 @@ def login():
         print("\nUsuario o contraseña incorrectos, vuelva a intentarlo")
 
 
-
-
-
-
-
-
+        
 """
                                                            ===  SECCIÓN DEL MENU  ===
                                                                
@@ -594,7 +595,6 @@ def login():
                                 controlar y asegurarse de que todos los menús se desplieguen cuando se requieran. 
 
 """
-
 
 
 #MENÚ USUARIOS
@@ -624,6 +624,7 @@ def menu_user():
 
 def menu_admin():
     while True:
+        print("\nIMPORTANTE: Las opciones que funcionan son las siguientes:\n(11) Gestión de modelos de autobús\n(12) Gestión de unidades\n(13) Gestión de conductores")
         print("\n=== MENÚ ADMINISTRATIVO ===")
         print("(11) Gestión de modelos de autobús")
         print("(12) Gestión de unidades")
@@ -652,12 +653,10 @@ def menu_admin():
             elif opcion_gm == "2":
                 archivo= "modelos.txt"
                 eliminar_modelo(archivo)
-                print ("Se elimino el modelo de forma exitosa!")
 
             elif opcion_gm == "3":
                 archivo= "modelos.txt"
                 modificar_modelos(archivo)
-                print("Se modifico el modelo de forma exitosa!")
 
             elif opcion_gm == "4":
                 archivo= "modelos.txt"
@@ -686,12 +685,10 @@ def menu_admin():
             elif opcion_gu == "2":
                 archivo= "unidades.txt"
                 eliminar_unidades(archivo)
-                print("Se elimino la unidad de forma exitosa!")
 
             elif opcion_gu == "3":
                 archivo= "unidades.txt"
                 modificar_unidades(archivo)
-                print("Se modifico la unidad de forma exitosa!")
 
             elif opcion_gu == "4":
                 archivo= "unidades.txt"
@@ -720,12 +717,10 @@ def menu_admin():
             elif opcion_gc == "2":
                 archivo= "conductores.txt"
                 eliminar_conductores(archivo)
-                print("Se ha eliminado al conductor correctamente!")
 
             elif opcion_gc == "3":
                 archivo= "conductores.txt"
                 modificar_conductores(archivo)
-                print("Se ha modificado al conductor correctamente")
 
             elif opcion_gc == "4":
                 archivo= "conductores.txt"
@@ -754,7 +749,8 @@ def menu_principal():
     while True:
         print("\nBienvenidos al Sistema TP")
         print("\n=== MENÚ PRINCIPAL ===")
-        print("(1) Opciones Administrativas")
+        print("\nAVISO: Como no se terminaron todas las funcionalidades, opciones de usuario\nes un menú vacío.")
+        print("\n(1) Opciones Administrativas")
         print("(2) Opciones de Usuario")
         print("(3) Salir")
 
@@ -766,7 +762,7 @@ def menu_principal():
         elif opcion == "3":
             print("¡Gracias por preferirnos!")
             print("Saliendo...")
-            break#Por el momento, buscar una mejor manera luego
+            break
         else:
             print("Opción no valida, porfavor escoja uno de los números disponibles")
 #Inicializar menú
