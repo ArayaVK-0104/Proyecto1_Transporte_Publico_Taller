@@ -33,9 +33,35 @@ def detecta_repetidos(archivo, dato_user):
                 linea= archivo.readline()
         return repetido
 
+#FUNCIÓN AUXILIAR - Comprobar_asociado
+#E: Recibe el archvio a comprobar, el dato que quiere borrar, y el campo en el archivo de destino
+#S: Si el dato que quiero borrar, existe en el archivo en el campo indicado que evaluo, significa que esta asociado, no permitira borrarlo
+#R: Restringe que pueden y que no pueden eliminar las funciones de eliminar x dato
+
+def comprobar_asociado(archivo, dato, campo):
+    with open(archivo, "r") as archivo:
+        linea= archivo.readline()
+        no_borrar= False
+        while linea != "":
+            i= 0
+            campo_actual= 1
+            dato_buscado= ""
+            while i < len(linea):
+                if linea[i] != ";" and no_borrar == False:
+                    if campo_actual == campo:
+                        dato_buscado= dato_buscado + linea[i]
+                else:
+                    campo_actual= campo_actual + 1
+                i= i + 1
+            if dato_buscado == dato:
+                no_borrar= True
+            else:
+                linea= archivo.readline()
+        return no_borrar
+                
 """
 
-SECCIÓN DE GESTIÓN DE UNIDADES
+SECCIÓN DE GESTIÓN DE CONDUCTORES
 
 """
 
@@ -450,24 +476,27 @@ def eliminar_modelo(archivo):
     if detecta_repetidos(archivo, modelo) == False:
         print("ERROR: Este modelo no existe porfavor refierase a (4) Mostrar modelos, para ver la lista de modelos registrados")
     else:
-        with open(archivo, "r") as archivo:
-            linea= archivo.readline()
-            guardar= ""
-            while linea != "":
-                i= 0
-                descripcion= ""
-                FIN_descripcion= False
-                while i < len(linea):
-                    if linea[i] != ";" and FIN_descripcion == False:
-                        descripcion= descripcion + linea[i]
-                    else:
-                        FIN_descripcion= True
-                    i= i + 1
-                if descripcion != modelo:
-                    guardar= guardar + linea
+        if comprobar_asociado("unidades.txt", modelo, 2) == True:
+            print("ERROR: No se puede eliminar este modelo porque esta asociado a una unidad")
+        else:
+            with open(archivo, "r") as archivo:
                 linea= archivo.readline()
-        with open(archivo_origen, "w") as archivo:
-            archivo.write(guardar)
+                guardar= ""
+                while linea != "":
+                    i= 0
+                    descripcion= ""
+                    FIN_descripcion= False
+                    while i < len(linea):
+                        if linea[i] != ";" and FIN_descripcion == False:
+                            descripcion= descripcion + linea[i]
+                        else:
+                            FIN_descripcion= True
+                        i= i + 1
+                    if descripcion != modelo:
+                        guardar= guardar + linea
+                    linea= archivo.readline()
+            with open(archivo_origen, "w") as archivo:
+                archivo.write(guardar)
 
         
 #AGREGAR MODELOS
